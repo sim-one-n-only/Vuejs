@@ -13,10 +13,10 @@
   <body>
    <div id="app">
     
-      <h1 :title="intro">{{message}}</h1>
-       <ul>
-          <li v-for="count in count">Do it</li>
-       </ul>
+      <h1>Count: {{count}}</h1>
+       <!--<input type="text" v-model="message"/>-->
+       <button @click="countUp" class="btn btn-primary">Count Up</button>
+       <button @click="countDown" class="btn btn-primary">Count Down</button>
 	  </div>
     
     
@@ -32,15 +32,19 @@
 	   var app = new Vue({
 	el: '#app',
 	data: {
-		message: 'Hello Vue World',
-        intro: "Welcome to the Tutorial on" + " " + new Date(),
-        todos: [
-            {text: "wash dishes", id: 1},
-            {text: "laundry", id: 2},
-            {text: "grocery shopping", id: 3},
-        ],
-        count: 10
-},
+        message: 'Hello Vue World',
+        count: 0
+
+    },
+    methods: {
+	    countUp: function () {
+	        this.count += 1;
+        },
+
+        countDown: function () {
+            this.count -= 1;
+        }
+    }
 
 })
 	</script>

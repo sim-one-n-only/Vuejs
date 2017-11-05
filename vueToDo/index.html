@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue To Do</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+</head>
+<body>
+
+<div id="app" class="container">
+    <div class="row">
+        <h1 class="col-md-12 text-center">Hello {{fullName}}</h1>
+        <ul class="text-left">
+            <li>First Name: {{firstName}}</li>
+            <li>Last Name: {{lastName}}</li>
+        </ul>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label>Enter first name:</label>
+            <input type="text" v-model="firstName" class="form-control" />
+        </div>
+    <div class="form-group col-md-6">
+        <label>Enter last name:</label>
+        <input type="text" v-model="lastName" class="form-control" />
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+
+<script>
+    var app = new Vue({
+        el : "#app",
+        data: {
+            firstName: "",
+            lastName: ""
+    },
+        computed: {
+            fullName: function () {
+                return this.firstName + " " + this.lastName;
+
+        }
+        }
+
+    })
+</script>
+
+</html>
