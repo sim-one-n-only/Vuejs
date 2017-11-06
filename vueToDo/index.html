@@ -5,9 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Vue To Do</title>
+    <title>Vue Foundations Tutorial</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 </head>
 <body>
 
@@ -20,23 +21,53 @@
         </ul>
     </div>
 
-    <hr />
+    <hr/>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Full Name:</label>
+            <input type="text" class="form-control" v-model="fullName"/>
+        </div>
+    </div>
     <div class="row">
         <div class="form-group col-md-6">
             <label>Enter first name:</label>
-            <input type="text" v-model="firstName" class="form-control" />
+            <input type="text" v-model="firstName" class="form-control"/>
         </div>
-    <div class="form-group col-md-6">
-        <label>Enter last name:</label>
-        <input type="text" v-model="lastName" class="form-control" />
+        <div class="form-group col-md-6">
+            <label>Enter last name:</label>
+            <input type="text" v-model="lastName" class="form-control"/>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>You are a <strong>{{level}}</strong></h1>
+            <hr/>
+            <h3>Current XP: {{xp}}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-success btn-block" @click="addXP"><span
+                            class="glyphicon glyphicon-collapse-up"></span> Add
+                        XP
+                    </button>
+                </div>
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="form-group">
+                        <button class="btn btn-danger btn-block" @click="decreaseXP"><span
+                                class="glyphicon glyphicon-collapse-down"></span>
+                            Decrease XP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-</div>
-
-
-
-
-
 
 
 </body>
@@ -46,19 +77,48 @@
 
 <script>
     var app = new Vue({
-        el : "#app",
+        el: "#app",
         data: {
             firstName: "",
-            lastName: ""
-    },
+            lastName: "",
+            xp: 0
+        },
+        methods: {
+            addXP: function () {
+                return this.xp += 10;
+            },
+            decreaseXP: function () {
+                return this.xp -= 10;
+            }
+        },
         computed: {
-            fullName: function () {
-                return this.firstName + " " + this.lastName;
+            fullName: {
+//                getter function
+                get: function () {
+                    return this.firstName + " " + this.lastName;
+                },
+//                setter function
+                set: function (value) {
+                    var name = value.split(" ")
+                    this.firstName = name[0]
+                    this.lastName = name[name.length - 1]
+                },
+            },
 
+            level: function () {
+                if (this.xp >= 200) {
+                    return "Expert"
+                } else if (this.xp >= 100) {
+                    return "Novice"
+                } else if (this.xp >= 0) {
+                    return "Beginner"
+                } else {
+                    return "Dummy"
+                }
+            }
         }
-        }
-
     })
+
 </script>
 
 </html>

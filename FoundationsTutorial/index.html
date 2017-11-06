@@ -1,53 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Vue.JS Tutorial</title>
+    <title>Vue.js Tutorial | API Example</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  </head>
+    <link rel="stylesheet" href="styles.css">
+</head>
 
-  <body>
-   <div id="app">
-    
-      <h1>Count: {{count}}</h1>
-       <!--<input type="text" v-model="message"/>-->
-       <button @click="countUp" class="btn btn-primary">Count Up</button>
-       <button @click="countDown" class="btn btn-primary">Count Down</button>
-	  </div>
-    
-    
+<body>
+<div id="app">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="lead-form">
+                    <h1 class="text-center">Fill Out This Form</h1>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Starting Zip" v-model="startingZipCode">
+                            <span class="city-span">{{startingCity}}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Ending Zip" v-model="endingZipCode">
+                            <span class="city-span">{{endingCity}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block" id="submit-form">Submit</button>
+                        </div>
+                    </div>
+                </div><!-- end of .lead-form -->
+            </div> <!-- end of .col-md-6.col-md-offset-3 -->
+        </div> <!-- end of .row -->
+    </div> <!-- end of .container -->
+</div> <!-- end of #app -->
+</body>
 
-      
+<script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+<!--Javascript http library-->
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<!--Javascript library (helper functions)-->
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
 
-	
-  </body>
-
-	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-	<script>
-
-	   var app = new Vue({
-	el: '#app',
-	data: {
-        message: 'Hello Vue World',
-        count: 0
-
-    },
-    methods: {
-	    countUp: function () {
-	        this.count += 1;
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            startingZipCode: "",
+            startingCity: "",
+            endingZipCode: "",
+            endingCity: ""
         },
+        watch: {
+            startingZipCode: function () {
+                this.startingCity = ""
+                if (this.startingZipCode.length == 5) {
+//                    call API method
+                    this.lookUpStartingCity()
+                }
+            },
+            endingZipCode: function () {
+                this.endingCity = ""
+                if (this.endingZipCode.length == 5) {
+                    this.lookUpEndingCity()
+                }
+            }
+        },
+        methods: {
+            lookUpStartingCity:
+//                debounce waits for any other changes or corrections
+                _.debounce(function () {
+                    var app = this;
+//                    input API method.
+                    app.startingCity = "Searching..."
+                    axios.get('http://ziptasticapi.com/' + app.startingZipCode)
+                        .then(function (response) {
+                            app.startingCity = response.data.city + "," + response.data.state;
+                        })
+                        .catch(function (error) {
+                            app.startingCity = "Invalid Zipcode"
+                        })
+                }, 500),
 
-        countDown: function () {
-            this.count -= 1;
-        }
-    }
 
-})
-	</script>
+            lookUpEndingCity: _.debounce(function () {
+                var vm = this;
+                vm.endingCity = "Searching..."
+                axios.get('http://ziptasticapi.com/' + vm.endingZipCode)
+                    .then(function (response) {
+                        vm.endingCity = response.data.city + "," + response.data.state;
+                    })
+                    .catch(function (error) {
+                        app.endingCity = "Invlalid Zipcode"
+                    })
+            }, 500)
 
-  
+        },
+    })
+</script>
 </html>
